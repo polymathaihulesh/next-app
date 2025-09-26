@@ -54,7 +54,7 @@ export default function Home() {
             disabled={loading === '/api/test'}
             onClick={() => callApi('GET', '/api/test', undefined, setGetRes)}
           >
-            Call Test GET API
+         Call Test GET API
           </button>
           <div className="break-all text-xs text-gray-700 dark:text-gray-300">{getRes}</div>
 
