@@ -10,6 +10,8 @@ export default function Chat() {
 
   // Auto scroll to bottom when messages update
   useEffect(() => {
+    console.log("public url", process.env.NEXT_PUBLIC_URL);
+    
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
