@@ -21,6 +21,9 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# ---- Debug: Print env vars ----
+RUN echo "NEXT_PUBLIC_TEST_VAR=$NEXT_PUBLIC_TEST_VAR" \
+    && echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL"
 RUN bun run build
 
 # ---- Production runtime ----
