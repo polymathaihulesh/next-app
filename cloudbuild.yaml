@@ -1,4 +1,15 @@
 steps:
+  # Step 0: Print substitution values (for testing)
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "NEXT_PUBLIC_TEST_VAR=$_NEXT_PUBLIC_TEST_VAR"
+        echo "NEXT_PUBLIC_API_URL=$_NEXT_PUBLIC_API_URL"
+    # Make sure automapSubstitutions is enabled
+    automapSubstitutions: true
+
   # Step 1: Build Docker image with build args
   - name: 'gcr.io/cloud-builders/docker'
     args:
@@ -8,9 +19,9 @@ steps:
       - '-t' 
       - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:latest'
       - '--build-arg'
-      - 'NEXT_PUBLIC_TEST_VAR=$NEXT_PUBLIC_TEST_VAR'
+      - 'NEXT_PUBLIC_TEST_VAR=${_NEXT_PUBLIC_TEST_VAR}'
       - '--build-arg'
-      - 'NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL'
+      - 'NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}'
       - '--build-arg'
       - 'BUILDKIT_INLINE_CACHE=1'
       - '--cache-from'
@@ -24,12 +35,11 @@ steps:
       - '--all-tags'
       - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app'
 
-# Default substitution values (can be overridden in trigger UI or via gcloud)
+# Default substitution values
 substitutions:
   _NEXT_PUBLIC_TEST_VAR: 'default-test-value'
   _NEXT_PUBLIC_API_URL: 'https://api-dev.example.com'
 
-# Images for vulnerability scanning and deployment
 images:
   - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:$SHORT_SHA'
   - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:latest'
