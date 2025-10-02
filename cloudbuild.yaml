@@ -8,9 +8,9 @@ steps:
       - '-t' 
       - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:latest'
       - '--build-arg'
-      - 'NEXT_PUBLIC_TEST_VAR=${_NEXT_PUBLIC_TEST_VAR}'
+      - 'NEXT_PUBLIC_TEST_VAR=$NEXT_PUBLIC_TEST_VAR'
       - '--build-arg'
-      - 'NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}'
+      - 'NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL'
       - '--build-arg'
       - 'BUILDKIT_INLINE_CACHE=1'
       - '--cache-from'
@@ -24,7 +24,7 @@ steps:
       - '--all-tags'
       - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app'
 
-# Define default values for substitution variables
+# Default substitution values (can be overridden in trigger UI or via gcloud)
 substitutions:
   _NEXT_PUBLIC_TEST_VAR: 'default-test-value'
   _NEXT_PUBLIC_API_URL: 'https://api-dev.example.com'
@@ -35,5 +35,5 @@ images:
   - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:latest'
 
 options:
-  # Enable build caching for faster builds
   logging: CLOUD_LOGGING_ONLY
+  automapSubstitutions: true
