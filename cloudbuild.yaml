@@ -1,0 +1,21 @@
+steps:
+  # Step 1: Build Docker image with build args
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/my-next-app'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_TEST_VAR=${_NEXT_PUBLIC_TEST_VAR}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}'
+      - '.'
+
+  # Step 2: Push to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/my-next-app'
+
+images:
+  - 'gcr.io/$PROJECT_ID/my-next-app'
