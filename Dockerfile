@@ -12,8 +12,8 @@ FROM base AS builder
 WORKDIR /app
 
 # Accept build-time envs from Cloud Build
-ARG NEXT_PUBLIC_TEST_VAR=default-test-value
-ARG NEXT_PUBLIC_API_URL=https://api-dev.example.com
+ARG NEXT_PUBLIC_TEST_VAR=$NEXT_PUBLIC_TEST_VAR
+ARG NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 # Expose them so Next.js can bake them into the bundle
 ENV NEXT_PUBLIC_TEST_VAR=$NEXT_PUBLIC_TEST_VAR
