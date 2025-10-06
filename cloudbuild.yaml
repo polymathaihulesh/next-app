@@ -1,5 +1,5 @@
 steps:
-  # Step 0: Print substitution values (for testing)
+  # Step 0: Print substitution values (for testing/debugging)
   - name: 'ubuntu'
     entrypoint: 'bash'
     args:
@@ -7,7 +7,6 @@ steps:
       - |
         echo "NEXT_PUBLIC_TEST_VAR=$_NEXT_PUBLIC_TEST_VAR"
         echo "NEXT_PUBLIC_API_URL=$_NEXT_PUBLIC_API_URL"
-    # Make sure automapSubstitutions is enabled
     automapSubstitutions: true
 
   # Step 1: Build Docker image with build args
@@ -15,9 +14,9 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:$SHORT_SHA'
-      - '-t' 
-      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:latest'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:$SHORT_SHA'
+      - '-t'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:latest'
       - '--build-arg'
       - 'NEXT_PUBLIC_TEST_VAR=${_NEXT_PUBLIC_TEST_VAR}'
       - '--build-arg'
@@ -25,24 +24,40 @@ steps:
       - '--build-arg'
       - 'BUILDKIT_INLINE_CACHE=1'
       - '--cache-from'
-      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:latest'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:latest'
       - '.'
 
-  # Step 2: Push to Artifact Registry
+  # Step 2: Push to Cloud Run’s Artifact Registry repository
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
       - '--all-tags'
-      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp'
+
+  # ✅ Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      [
+        'run', 'deploy', 'ujjivan-vehicle-finance-dashboard-gcp', # service name
+        '--image', 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:latest',
+        '--region', 'asia-south1',
+        '--platform', 'managed',
+        '--allow-unauthenticated',
+        '--port', '8080',
+        '--memory', '512Mi',
+        '--set-env-vars', 'NEXT_PUBLIC_TEST_VAR=$_NEXT_PUBLIC_TEST_VAR,NEXT_PUBLIC_API_URL=$_NEXT_PUBLIC_API_URL'
+      ]
 
 # Default substitution values
 substitutions:
   _NEXT_PUBLIC_TEST_VAR: 'default-test-value'
   _NEXT_PUBLIC_API_URL: 'https://api-dev.example.com'
 
+# Build record images (optional but nice for traceability)
 images:
-  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:$SHORT_SHA'
-  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/my-next-repo/my-next-app:latest'
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:$SHORT_SHA'
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY
