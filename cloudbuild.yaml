@@ -16,14 +16,14 @@ steps:
       [
         'build',
         '-t',
-        'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:$SHORT_SHA',
+        'asia-south1-docker.pkg.dev/ujjivan-vehicle-finance/cloud-run-source-deploy/next-app/next-app-2:$SHORT_SHA',
         '-t',
-        'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:latest',
+        'asia-south1-docker.pkg.dev/ujjivan-vehicle-finance/cloud-run-source-deploy/next-app/next-app-2:latest',
         '--build-arg=NEXT_PUBLIC_TEST_VAR=${_NEXT_PUBLIC_TEST_VAR}',
         '--build-arg=NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}',
         '--build-arg=BUILDKIT_INLINE_CACHE=1',
         '--cache-from',
-        'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:latest',
+        'asia-south1-docker.pkg.dev/ujjivan-vehicle-finance/cloud-run-source-deploy/next-app/next-app-2:latest',
         '.'
       ]
 
@@ -33,7 +33,7 @@ steps:
       [
         'push',
         '--all-tags',
-        'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp'
+        'asia-south1-docker.pkg.dev/ujjivan-vehicle-finance/cloud-run-source-deploy/next-app/next-app-2'
       ]
 
   # 🚀 Step 3: Deploy to Cloud Run
@@ -43,9 +43,9 @@ steps:
       [
         'run',
         'deploy',
-        'ujjivan-vehicle-finance-dashboard-gcp',
+        'next-app-2',
         '--image',
-        'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:latest',
+        'asia-south1-docker.pkg.dev/ujjivan-vehicle-finance/cloud-run-source-deploy/next-app/next-app-2:latest',
         '--region',
         'asia-south1',
         '--platform',
@@ -66,8 +66,8 @@ substitutions:
 
 # 🪞 Images that will appear in the build history
 images:
-  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:$SHORT_SHA'
-  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/ujjivan-vehicle-finance-dashboard-gcp/ujjivan-vehicle-finance-dashboard-gcp:latest'
+  - 'asia-south1-docker.pkg.dev/ujjivan-vehicle-finance/cloud-run-source-deploy/next-app/next-app-2:$SHORT_SHA'
+  - 'asia-south1-docker.pkg.dev/ujjivan-vehicle-finance/cloud-run-source-deploy/next-app/next-app-2:latest'
 
 # ⚙️ Build options
 options:
