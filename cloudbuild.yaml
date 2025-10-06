@@ -7,6 +7,7 @@ steps:
       - |
         echo "NEXT_PUBLIC_TEST_VAR=$_NEXT_PUBLIC_TEST_VAR"
         echo "NEXT_PUBLIC_API_URL=$_NEXT_PUBLIC_API_URL"
+        echo "NEXT_PUBLIC_API_URL=checking substitution works!"
     automapSubstitutions: true
 
   # Step 1: Build Docker image with build args
