@@ -11,8 +11,8 @@ export default function Home() {
 
   async function callApi(method: 'GET' | 'POST', url: string, body?: Record<string, unknown>, setRes?: (v: string) => void) {
     setLoading(url);
-    console.log("Test Var:", process.env.NEXT_PUBLIC_TEST_VAR);
-console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
+    console.log("Test Var check:", process.env.NEXT_PUBLIC_TEST_VAR);
+console.log("API URL check:", process.env.NEXT_PUBLIC_API_URL);
 
     try {
       const res = await fetch(url, {
